@@ -1,24 +1,22 @@
+package Tasks;
+
 import java.util.Objects;
 
 public class Task {
-    private String name;
-    private String description;
-    private int id;
-    private TaskStatus taskStatus;
-
-    public Task(String name, String description, int id, TaskStatus taskStatus) {
-        this.name = name;
-        this.description = description;
-        this.id = id;
-        this.taskStatus = taskStatus;
-    }
+    protected int id;
+    protected String name;
+    protected String description;
+    protected TaskStatus taskStatus;
+    private static int count = 0;
 
     public Task(String name, String description) {
-        this(name,description,0,TaskStatus.NEW);
+        this.name = name;
+        this.description = description;
+       // this.id = id;
+        this.taskStatus = TaskStatus.NEW;
+        this.id = generateId();
     }
-    public Task(String name) {
-        this(name,"description",0,TaskStatus.NEW);
-    }
+
 
     public String getName() {
         return name;
@@ -51,6 +49,7 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
+    Integer generateId() { return ++count; }
 
     @Override
     public boolean equals(Object o) {
@@ -67,10 +66,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "Tasks.Task{" +
+                ", id=" + id +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
+
                 ", taskStatus=" + taskStatus +
                 '}';
     }

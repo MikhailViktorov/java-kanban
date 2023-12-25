@@ -1,15 +1,12 @@
+package Tasks;
 
 public class Subtask extends Task {
     // Для каждой подзадачи известно, в рамках какого эпика она выполняется
     private Integer epicId;
 
-    public Subtask(String name, String description, int id, TaskStatus taskStatus, Integer epicId) {
-        super(name, description, id, taskStatus);
-        this.epicId = epicId;
-    }
-
     public Subtask(String name, String description, Integer epicId) {
-        this(name,description,0,TaskStatus.NEW,epicId);
+        super(name, description);
+        this.epicId = epicId;
     }
 
     public Integer getEpicId() {
@@ -22,11 +19,11 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
+        return "Tasks.Subtask{" +
                 "name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", Id=" + getId() +
-                ", TaskStatus=" + getTaskStatus() +
+                ", Tasks.TaskStatus=" + getTaskStatus() +
                 ", epicId=" + epicId;
     }
 }
