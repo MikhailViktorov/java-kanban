@@ -11,29 +11,22 @@ import java.util.List;
 import java.util.Map;
 
 public class TaskManager {
-    private int taskId = 1;
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
 
     public void createTask(Task task) {
-        int id = taskId++;
-        task.setId(id);
-        tasks.put(id, task);
+        tasks.put(task.getId(), task);
     }
 
     public void createEpic(Epic epic) {
-        int id = taskId++;
-        epic.setId(id);
-        epics.put(id, epic);
+        epics.put(epic.getId(), epic);
     }
 
     public void createSubtask(Subtask subtask) {
-        int id = taskId++;
-        subtask.setId(id);
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtask(subtask.getId());
-        subtasks.put(id, subtask);
+        subtasks.put(subtask.getId(), subtask);
         updateEpicStatus(epic);
     }
 
@@ -52,8 +45,8 @@ public class TaskManager {
 
     public void deleteEpicById(int id) {
         Epic epic = epics.get(id);
-        for (Integer tasId : epic.getSubtaskList()) {
-            subtasks.remove(tasId);
+        for (Integer taskId : epic.getSubtaskList()) {
+            subtasks.remove(taskId);
         }
         epics.remove(id);
     }

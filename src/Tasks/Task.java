@@ -12,7 +12,6 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-       // this.id = id;
         this.taskStatus = TaskStatus.NEW;
         this.id = generateId();
     }
@@ -49,7 +48,10 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
-    Integer generateId() { return ++count; }
+
+    Integer generateId() {
+        return ++count;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -67,10 +69,9 @@ public class Task {
     @Override
     public String toString() {
         return "Tasks.Task{" +
-                ", id=" + id +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-
                 ", taskStatus=" + taskStatus +
                 '}';
     }
