@@ -26,7 +26,7 @@ public class Main {
         taskTracker.getSubtaskById(2);
         taskTracker.getSubtaskById(3);
         printAllTasks(taskTracker);
-
+        System.out.println("______________________________");
 
 
         System.out.println(epic1);
