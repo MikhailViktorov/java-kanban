@@ -1,6 +1,6 @@
 package test;
 
-import Managers.*;
+import managers.*;
 import org.junit.jupiter.api.Test;
 
 

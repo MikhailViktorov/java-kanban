@@ -1,14 +1,11 @@
-package Managers;
+package managers;
 
-import Tasks.Epic;
-import Tasks.Subtask;
-import Tasks.Task;
-import Tasks.TaskStatus;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
@@ -133,8 +130,8 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epic);
         }
     }
-    @Override
-    public void updateEpicStatus(Epic epic) {
+
+    private void updateEpicStatus(Epic epic) {
         boolean allNew = true;
         boolean allDone = true;
         for (Integer taskId: epic.getSubtaskList()) {
@@ -160,6 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+
     }
 }
 

@@ -1,9 +1,10 @@
-import Managers.InMemoryTaskManager;
-import Managers.TaskManager;
-import Tasks.Epic;
-import Tasks.Subtask;
-import Tasks.Task;
-import Tasks.TaskStatus;
+import managers.InMemoryTaskManager;
+import managers.Managers;
+import managers.TaskManager;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
 
 /**
  * Created by Mikhail Viktorov on 24.12.2023 (update 15.01.2024)
@@ -12,7 +13,8 @@ import Tasks.TaskStatus;
 public class Main {
     public static void main(String[] args) {
 
-        TaskManager taskTracker = new InMemoryTaskManager();
+       InMemoryTaskManager taskTracker = Managers.getDefault();
+
         Epic epic1 = new Epic("Эпик 1", "Нужно сделать");
         taskTracker.createEpic(epic1);
         Subtask subtask1 = new Subtask("Subtask1 создания ",

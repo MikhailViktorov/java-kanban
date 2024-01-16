@@ -1,8 +1,9 @@
-package Managers;
+package managers;
 
-import Tasks.Task;
+import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager{
@@ -19,6 +20,7 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public List<Task> getHistory() {
+        Collections.reverse(historyList);
         return historyList;
     }
 }
