@@ -1,9 +1,9 @@
 package test;
 
 import managers.*;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import models.Epic;
+import models.Subtask;
+import models.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,46 +14,44 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    public static InMemoryTaskManager taskManager;
+    TaskManager taskManager;
+
 
     @BeforeEach
-    public void beforeEach() {
-        taskManager = Managers.getDefault();
+    public void createTaskManager() {
+        taskManager = Managers.getDefault();;
     }
+
 
     @Test
     public void tasksShouldBeEqualsWithSameId() {
-        taskManager.createTask(new Task("task1","description1"));
-        assertSame(taskManager.getTaskById(1),taskManager.getTaskById(1),"Tasks with same id not are equals");
-    }
-    @Test
-    public void epicsShouldBeEqualsWithSameId() {
-        taskManager.createEpic(new Epic("epic1","description1"));
-        assertSame(taskManager.getEpicById(1),taskManager.getEpicById(1),"Epics with same id not are equals");
-    }
-    @Test
-    public void TaskShouldBeCreatedAndCanFindIt() {
-        Task task1 = new Task("task1", "description1");
-        Task task2 = new Task("task2", "description2");
-        taskManager.createTask(task1);
-        taskManager.createTask(task2);
-        List<Task> expected = new ArrayList<>();
-        expected.add(task1);
-        expected.add(task2);
-        List<Task> actual = taskManager.getAllTasks();
-        assertEquals(task1,taskManager.getTaskById(1));
-        assertNotNull(actual);
-        assertEquals(expected,actual);
+        taskManager.createTask(new Task("task1", "description1"));
+        assertSame(taskManager.getTaskById(1), taskManager.getTaskById(1), "Tasks with same id not are equals");
     }
 
     @Test
-    public void EpicAndSubTaskShouldBeCreatedAndCanFindIt() {
-        taskManager.createEpic( new Epic("epic1","description1"));
-        taskManager.createSubtask(new Subtask("subtask","description",1));
-        assertNotNull(taskManager.getEpicById(1));
-        assertNotNull(taskManager.getSubtaskById(2));
+    void createTask() {
+        Task task = new Task("Task name", "Task description");
+        taskManager.createTask(task);
+        assertEquals(1, task.getId(), "task has an invalid ID");
+        assertEquals(1, taskManager.getAllTasks().size(), "task is not added to TasksMap");
     }
-    //Не пойму с тестами, если запускать по отдельности, то проходят, запускаю проверку всего класса то выдаёт ошибки.
+    @Test
+    void createSubtask() {
+        Epic epic = new Epic("Epic name", "Epic description");
+        taskManager.createEpic(epic);
+        Subtask subtask = new Subtask("Subtask name","Subtask description",epic.getId());
+        taskManager.createSubtask(subtask);
+        assertEquals(2, subtask.getId(), "Subtask has an invalid ID");
+        assertEquals(1, epic.getSubtaskList().size(), "Subtask is not added to EpicSubtasksList");
+        assertEquals(1, taskManager.getAllSubtasks().size(), "Subtask is not added to SubtasksMap");
+    }
+
+
+
+
+
+
 
 
 

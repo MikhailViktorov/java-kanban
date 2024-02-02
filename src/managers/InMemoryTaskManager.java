@@ -1,9 +1,9 @@
 package managers;
 
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
-import tasks.TaskStatus;
+import models.Epic;
+import models.Subtask;
+import models.Task;
+import models.TaskStatus;
 
 import java.util.*;
 
@@ -35,6 +35,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int id) {
         tasks.remove(id);
+        historyManager.remove(id);
     }
     @Override
     public void deleteAllEpics() {
@@ -48,6 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.remove(taskId);
         }
         epics.remove(id);
+        historyManager.remove(id);
     }
     @Override
     public void deleteAllSubtasks() {
@@ -65,6 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.remove(id);
         epic.deleteSubtask(id);
         updateEpicStatus(epic);
+        historyManager.remove(id);
     }
     @Override
     public Task getTaskById(int id) {
@@ -158,6 +161,12 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getHistory() {
         return historyManager.getHistory();
 
+    }
+    public int getHistorySize() {
+        return historyManager.historySize();
+    }
+    public void removeHistoryNode(int id) {
+        historyManager.remove(id);
     }
 }
 
