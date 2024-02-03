@@ -75,4 +75,8 @@ public class Task {
                 ", taskStatus=" + taskStatus +
                 '}';
     }
+
+    public static void setCount(int count) {
+        Task.count = count;
+    }
 }

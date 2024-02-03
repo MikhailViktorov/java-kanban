@@ -7,7 +7,7 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager{
     private final CustomLinkedList<Task> historyLinkedList = new CustomLinkedList<>();
-    Map<Integer,Node<Task>> historyTasksMap = new HashMap<>();
+    private final Map<Integer,Node<Task>> historyTasksMap = new HashMap<>();
     @Override
     public void add(Task task){
       if (historyTasksMap.containsKey(task.getId())) {
