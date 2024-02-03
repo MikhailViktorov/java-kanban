@@ -57,7 +57,6 @@ class InMemoryTaskManagerTest {
     @Test
     void subtasksShouldCreatedAndAddToList() {
         Epic epic = createEpicForTests();
-
         Subtask subtask = createSubtaskForTests(epic.getId());
 
         final int subtaskId = subtask.getId();
@@ -67,6 +66,7 @@ class InMemoryTaskManagerTest {
         assertEquals(subtask, savedSubtask, "Subtasks with same id not are equals");
         assertEquals(2, subtask.getId(), "Subtask has an invalid id");
         assertEquals(1, taskManager.getAllSubtasks().size(), "Subtask is not added to SubtaskList");
+        assertEquals(1,taskManager.getEpicTasks(epic.getId()).size(),"Subtask not found in EpicSubtaskList");
 
     }
 
@@ -84,7 +84,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void deleteTaskById() {
+    void shouldDeleteTaskById() {
         Task task = createTaskForTests();
 
         taskManager.deleteTaskById(task.getId());
@@ -94,14 +94,14 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void getAllTasks() {
+    void shouldGetAllTasks() {
         assertEquals(0, taskManager.getAllTasks().size(), "TaskList not empty");
         Task task = createTaskForTests();
         assertEquals(1, taskManager.getAllTasks().size(), "task is not added to TasksList");
     }
 
     @Test
-    void getAllSubtasks() {
+    void shouldGetAllSubtasks() {
         assertEquals(0, taskManager.getAllSubtasks().size(), "SubtaskList not empty");
         Epic epic = createEpicForTests();
         Subtask subtask = createSubtaskForTests(epic.getId());
@@ -109,7 +109,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void getAllEpics() {
+    void shouldGetAllEpics() {
         assertEquals(0, taskManager.getAllEpics().size(), "EpicList not empty");
         Epic epic = createEpicForTests();
         assertEquals(1, taskManager.getAllEpics().size(), "Epic is not added to EpicList");
@@ -131,5 +131,60 @@ class InMemoryTaskManagerTest {
         taskManager.updateEpics(epic);
         assertEquals(TaskStatus.DONE, epic.getTaskStatus(), "Epic status after change subtask status is invalid");
     }
+    @Test
+    void shouldUpdateTask() {
+        Task task = createTaskForTests();
+        Task newTask = new Task("Task2","description2");
+        newTask.setId(task.getId());
+        taskManager.updateTask(newTask);
+        assertEquals(1, taskManager.getAllTasks().size(), "invalid add to TaskList");
+        assertEquals(newTask, taskManager.getTaskById(task.getId()), "invalid update Task");
 
+    }
+
+    @Test
+    void shouldUpdateSubtask() {
+        Epic epic = createEpicForTests();
+        Subtask subtask = createSubtaskForTests(epic.getId());
+        Subtask newSubtask = new Subtask("Subtask2","desription2",epic.getId());
+
+        newSubtask.setId(subtask.getId());
+        newSubtask.setTaskStatus(TaskStatus.IN_PROGRESS);
+        taskManager.updateSubtasks(newSubtask);
+        subtask = taskManager.getSubtaskById(epic.getSubtaskList().get(0));
+
+        assertEquals(newSubtask.getName(), subtask.getName(), "Subtask name is not updated");
+        assertEquals(newSubtask.getDescription(), subtask.getDescription(),
+                "Subtask description is not updated");
+        assertEquals(newSubtask.getTaskStatus(),subtask.getTaskStatus(),"Subtask Status is not updated");
+
+    }
+
+    @Test
+    void shouldUpdateEpic() {
+        Epic epic = createEpicForTests();
+        Epic newEpic = new Epic("Epic2","Epic2description");
+
+        newEpic.setId(epic.getId());
+        taskManager.updateEpics(newEpic);
+        epic = taskManager.getEpicById(epic.getId());
+
+        assertEquals("Epic2", epic.getName(), "Subtask name is not updated");
+        assertEquals("Epic2description", epic.getDescription(), "Epic description is not updated");
+
+    }
+
+    @Test
+    void shouldGetHistory() {
+        assertEquals(taskManager.getHistory().size(), 0, "History is fill");
+
+        Task task = createTaskForTests();
+        Epic epic = createEpicForTests();
+
+        taskManager.getTaskById(task.getId());
+        taskManager.getEpicById(epic.getId());
+
+        assertEquals(taskManager.getHistory().size(), 2, "History has incorrect fill");
+
+    }
 }
