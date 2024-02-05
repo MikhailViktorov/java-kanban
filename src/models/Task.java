@@ -1,4 +1,4 @@
-package tasks;
+package models;
 
 import java.util.Objects;
 
@@ -74,5 +74,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", taskStatus=" + taskStatus +
                 '}';
+    }
+
+    public static void setCount(int count) {
+        Task.count = count;
     }
 }
