@@ -1,12 +1,12 @@
 package models;
 
 public class Subtask extends Task {
-    // Для каждой подзадачи известно, в рамках какого эпика она выполняется
     private Integer epicId;
 
     public Subtask(String name, String description, Integer epicId) {
         super(name, description);
         this.epicId = epicId;
+        this.taskType = TaskTypes.SUBTASK;
     }
 
     public Integer getEpicId() {

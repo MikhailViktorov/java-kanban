@@ -3,20 +3,24 @@ package managers;
 import models.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CSVTaskFormatter {
 
     public static String toString(Task task) {
         int id = task.getId();
-        String type = task.getClass().getSimpleName().toUpperCase();
+        String type = task.getTaskType().toString();
         String name = task.getName();
         TaskStatus status = task.getTaskStatus();
         String description = task.getDescription();
+
         String taskString = String.format("%s,%s,%s,%s,%s", id, type, name, status, description);
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
+            taskString += ",";
             taskString += subtask.getEpicId();
+
         }
         return taskString;
     }
@@ -35,29 +39,28 @@ public class CSVTaskFormatter {
                 task.setId(id);
                 task.setTaskStatus(status);
                 return task;
-            case SUBTASK:
-                Integer epicId = Integer.parseInt(dataValues[8]);
-                Subtask subtask = new Subtask(name, description, epicId);
-                subtask.setId(id);
-                subtask.setTaskStatus(status);
-                return subtask;
             case EPIC:
                 Epic epic = new Epic(name, description);
                 epic.setId(id);
                 return epic;
-            default:
+            case SUBTASK:
+                Integer epicId = Integer.parseInt(dataValues[5]);
+                Subtask subtask = new Subtask(name, description, epicId);
+                subtask.setId(id);
+                subtask.setTaskStatus(status);
+                return subtask;
 
         }
         return null;
     }
     public static String historyToString(HistoryManager historyManager) {
         List<Task> historyData = historyManager.getHistory();
-        StringBuilder stringBuilder = new StringBuilder();
         if (historyData != null) {
+            StringBuilder stringBuilder = new StringBuilder();
             for (Task task : historyData) {
                 stringBuilder.append(task.getId()).append(",");
             }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+          //  stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             return String.valueOf(stringBuilder);
         } else return "";
     }
@@ -68,6 +71,7 @@ public class CSVTaskFormatter {
         for (String taskId : values) {
             historyList.add(Integer.parseInt(taskId));
         }
+        Collections.reverse(historyList);
         return historyList;
     }
 }

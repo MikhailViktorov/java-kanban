@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,7 +18,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
 
-    public void save() {
+    private void save() {
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileForSaveData))) {
             bufferedWriter.write("id,type,name,status,description,epic\n");
@@ -62,18 +61,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             if (!line.isBlank() && !line.equals("\n")) {
                 Task task = CSVTaskFormatter.fromString(line);
                 if (task instanceof Subtask) {
-                    manager.createSubtask((Subtask) task);
+                    manager.subtasks.put(task.getId(),(Subtask) task);
                 } else if (task instanceof Epic) {
-                    manager.createEpic((Epic) task);
+                    manager.epics.put(task.getId(),(Epic) task);
                 } else if (task != null) {
-                    manager.createTask(task);
+                    manager.tasks.put(task.getId(), task);
                 }
             }
         }
         for (Integer id : CSVTaskFormatter.historyFromString(history)) {
-            manager.historyManager.add(manager.getTaskById(id));
+            if (manager.tasks.containsKey(id)) {
+                manager.historyManager.add(manager.tasks.get(id));
+            } else if (manager.epics.containsKey(id)) {
+                manager.historyManager.add(manager.epics.get(id));
+            } else {
+                manager.historyManager.add(manager.subtasks.get(id));
+            }
         }
-        manager.save();
         return manager;
     }
 
@@ -189,6 +193,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public List<Task> getHistory() {
         return super.getHistory();
+    }
+
+    public static void main(String[] args) throws IOException {
+        FileBackedTaskManager fileManager = new FileBackedTaskManager(new File("saveTasks2.csv"));
+        fileManager.createTask(new Task("task1", "Купить автомобиль"));
+        fileManager.createEpic(new Epic("new Epic1", "Новый Эпик"));
+        fileManager.createSubtask(new Subtask("New Subtask", "Подзадача", 2));
+        fileManager.createSubtask(new Subtask("New Subtask2", "Подзадача2", 2));
+        fileManager.getTaskById(1);
+        fileManager.getEpicById(2);
+        fileManager.getSubtaskById(3);
+        System.out.println(fileManager.getAllTasks());
+        System.out.println(fileManager.getEpics());
+        System.out.println(fileManager.getAllSubtasks());
+        System.out.println(fileManager.getHistory());
+        System.out.println("\n\n" + "new" + "\n\n");
+        FileBackedTaskManager fileBackedTasksManager = loadFromFile(new File("saveTasks2.csv"));
+        System.out.println(fileBackedTasksManager.getAllTasks());
+        System.out.println(fileBackedTasksManager.getEpics());
+        System.out.println(fileBackedTasksManager.getAllSubtasks());
+        System.out.println(fileBackedTasksManager.getHistory());
     }
 
 }

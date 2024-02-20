@@ -7,6 +7,7 @@ public class Task {
     protected String name;
     protected String description;
     protected TaskStatus taskStatus;
+    protected TaskTypes taskType;
     private static int count = 0;
 
     public Task(String name, String description) {
@@ -14,6 +15,7 @@ public class Task {
         this.description = description;
         this.taskStatus = TaskStatus.NEW;
         this.id = generateId();
+        this.taskType = TaskTypes.TASK;
     }
 
 
@@ -47,6 +49,10 @@ public class Task {
 
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    public TaskTypes getTaskType() {
+        return taskType;
     }
 
     Integer generateId() {
