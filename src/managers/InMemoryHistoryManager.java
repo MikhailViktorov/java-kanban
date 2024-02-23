@@ -37,10 +37,14 @@ public class InMemoryHistoryManager implements HistoryManager{
 
 
 
+
+
     public static class CustomLinkedList<T> {
         private Node<T> head;
         private Node<T> tail;
         private int size = 0;
+
+
 
         void linkLast(T task) {
             final Node<T> oldTail = tail;
@@ -107,6 +111,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         public int getSize() {
             return size;
         }
+
     }
 }
 

@@ -187,4 +187,5 @@ class InMemoryTaskManagerTest {
         assertEquals(taskManager.getHistory().size(), 2, "History has incorrect fill");
 
     }
+
 }

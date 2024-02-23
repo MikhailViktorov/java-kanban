@@ -42,7 +42,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
 
-
     public static FileBackedTaskManager loadFromFile(File file) throws IOException {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
@@ -61,21 +60,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             if (!line.isBlank() && !line.equals("\n")) {
                 Task task = CSVTaskFormatter.fromString(line);
                 if (task instanceof Subtask) {
-                    manager.subtasks.put(task.getId(),(Subtask) task);
+                    manager.subtasks.put(task.getId(), (Subtask) task);
                 } else if (task instanceof Epic) {
-                    manager.epics.put(task.getId(),(Epic) task);
+                    manager.epics.put(task.getId(), (Epic) task);
                 } else if (task != null) {
                     manager.tasks.put(task.getId(), task);
                 }
             }
         }
-        for (Integer id : CSVTaskFormatter.historyFromString(history)) {
-            if (manager.tasks.containsKey(id)) {
-                manager.historyManager.add(manager.tasks.get(id));
-            } else if (manager.epics.containsKey(id)) {
-                manager.historyManager.add(manager.epics.get(id));
-            } else {
-                manager.historyManager.add(manager.subtasks.get(id));
+        if (CSVTaskFormatter.historyFromString(history) != null) {
+            for (Integer id : CSVTaskFormatter.historyFromString(history)) {
+                if (manager.tasks.containsKey(id)) {
+                    manager.historyManager.add(manager.tasks.get(id));
+                } else if (manager.epics.containsKey(id)) {
+                    manager.historyManager.add(manager.epics.get(id));
+                } else {
+                    manager.historyManager.add(manager.subtasks.get(id));
+                }
             }
         }
         return manager;
@@ -194,6 +195,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public List<Task> getHistory() {
         return super.getHistory();
     }
+
 
     public static void main(String[] args) throws IOException {
         FileBackedTaskManager fileManager = new FileBackedTaskManager(new File("saveTasks2.csv"));

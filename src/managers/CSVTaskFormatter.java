@@ -53,6 +53,7 @@ public class CSVTaskFormatter {
         }
         return null;
     }
+
     public static String historyToString(HistoryManager historyManager) {
         List<Task> historyData = historyManager.getHistory();
         if (historyData != null) {
@@ -60,18 +61,20 @@ public class CSVTaskFormatter {
             for (Task task : historyData) {
                 stringBuilder.append(task.getId()).append(",");
             }
-          //  stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             return String.valueOf(stringBuilder);
         } else return "";
     }
 
     public static List<Integer> historyFromString(String value) {
-        String[] values = value.split(",");
         List<Integer> historyList = new ArrayList<>();
-        for (String taskId : values) {
-            historyList.add(Integer.parseInt(taskId));
+        if (!value.equals("")) {
+            String[] values = value.split(",");
+            for (String taskId : values) {
+                historyList.add(Integer.parseInt(taskId));
+            }
+            Collections.reverse(historyList);
+            return historyList;
         }
-        Collections.reverse(historyList);
-        return historyList;
+        return null;
     }
 }
