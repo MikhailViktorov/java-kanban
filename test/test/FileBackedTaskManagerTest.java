@@ -16,9 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FileBackedTaskManagerTest {
     TaskManager fileBackedTaskManager;
     File tmpFile;
+
     {
         try {
-            tmpFile = File.createTempFile("data",".csv");
+            tmpFile = File.createTempFile("data", ".csv");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,10 +92,6 @@ public class FileBackedTaskManagerTest {
         assertEquals(0, newFBTM.getAllEpics().size());
         assertEquals(0, newFBTM.getHistory().size());
     }
-
-
-
-
 
 
 }

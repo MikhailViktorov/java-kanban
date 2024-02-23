@@ -66,7 +66,7 @@ class InMemoryTaskManagerTest {
         assertEquals(subtask, savedSubtask, "Subtasks with same id not are equals");
         assertEquals(2, subtask.getId(), "Subtask has an invalid id");
         assertEquals(1, taskManager.getAllSubtasks().size(), "Subtask is not added to SubtaskList");
-        assertEquals(1,taskManager.getEpicTasks(epic.getId()).size(),"Subtask not found in EpicSubtaskList");
+        assertEquals(1, taskManager.getEpicTasks(epic.getId()).size(), "Subtask not found in EpicSubtaskList");
 
     }
 
@@ -131,10 +131,11 @@ class InMemoryTaskManagerTest {
         taskManager.updateEpics(epic);
         assertEquals(TaskStatus.DONE, epic.getTaskStatus(), "Epic status after change subtask status is invalid");
     }
+
     @Test
     void shouldUpdateTask() {
         Task task = createTaskForTests();
-        Task newTask = new Task("Task2","description2");
+        Task newTask = new Task("Task2", "description2");
         newTask.setId(task.getId());
         taskManager.updateTask(newTask);
         assertEquals(1, taskManager.getAllTasks().size(), "invalid add to TaskList");
@@ -146,7 +147,7 @@ class InMemoryTaskManagerTest {
     void shouldUpdateSubtask() {
         Epic epic = createEpicForTests();
         Subtask subtask = createSubtaskForTests(epic.getId());
-        Subtask newSubtask = new Subtask("Subtask2","desription2",epic.getId());
+        Subtask newSubtask = new Subtask("Subtask2", "desription2", epic.getId());
 
         newSubtask.setId(subtask.getId());
         newSubtask.setTaskStatus(TaskStatus.IN_PROGRESS);
@@ -156,14 +157,14 @@ class InMemoryTaskManagerTest {
         assertEquals(newSubtask.getName(), subtask.getName(), "Subtask name is not updated");
         assertEquals(newSubtask.getDescription(), subtask.getDescription(),
                 "Subtask description is not updated");
-        assertEquals(newSubtask.getTaskStatus(),subtask.getTaskStatus(),"Subtask Status is not updated");
+        assertEquals(newSubtask.getTaskStatus(), subtask.getTaskStatus(), "Subtask Status is not updated");
 
     }
 
     @Test
     void shouldUpdateEpic() {
         Epic epic = createEpicForTests();
-        Epic newEpic = new Epic("Epic2","Epic2description");
+        Epic newEpic = new Epic("Epic2", "Epic2description");
 
         newEpic.setId(epic.getId());
         taskManager.updateEpics(newEpic);

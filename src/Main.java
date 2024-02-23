@@ -57,7 +57,7 @@ public class Main {
         System.out.println("Размер истории после удаления епика без сабтасков: " + taskTracker.getHistorySize());
         // 5. Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.
         taskTracker.deleteEpicById(epic1.getId());
-        for(Integer s : epic1.getSubtaskList()) {
+        for (Integer s : epic1.getSubtaskList()) {
             taskTracker.removeHistoryNode(s);
         }
         System.out.println("Размер истории после удаление эпика с 3 сабтасками: " + taskTracker.getHistorySize());
