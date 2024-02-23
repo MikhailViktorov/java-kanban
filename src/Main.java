@@ -1,4 +1,3 @@
-import managers.FileBackedTaskManager;
 import managers.InMemoryTaskManager;
 import managers.Managers;
 import managers.TaskManager;
@@ -8,7 +7,7 @@ import models.Task;
 
 
 /**
- * Created by Mikhail Viktorov on 24.12.2023 (update 19.02.2024)
+ * Created by Mikhail Viktorov on 24.12.2023 (update 23.02.2024)
  * the-rayn@yandex.ru
  */
 public class Main {
