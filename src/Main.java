@@ -5,13 +5,13 @@ import models.Epic;
 import models.Subtask;
 import models.Task;
 
+
 /**
- * Created by Mikhail Viktorov on 24.12.2023 (update 02.02.2024)
+ * Created by Mikhail Viktorov on 24.12.2023 (update 23.02.2024)
  * the-rayn@yandex.ru
  */
 public class Main {
     public static void main(String[] args) {
-
         InMemoryTaskManager taskTracker = Managers.getDefault();
 
         // 1. Создайте две задачи, эпик с тремя подзадачами и эпик без подзадач.
@@ -56,7 +56,7 @@ public class Main {
         System.out.println("Размер истории после удаления епика без сабтасков: " + taskTracker.getHistorySize());
         // 5. Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.
         taskTracker.deleteEpicById(epic1.getId());
-        for(Integer s : epic1.getSubtaskList()) {
+        for (Integer s : epic1.getSubtaskList()) {
             taskTracker.removeHistoryNode(s);
         }
         System.out.println("Размер истории после удаление эпика с 3 сабтасками: " + taskTracker.getHistorySize());

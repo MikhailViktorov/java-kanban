@@ -5,21 +5,22 @@ import models.Task;
 
 import java.util.*;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
     private final CustomLinkedList<Task> historyLinkedList = new CustomLinkedList<>();
-    private final Map<Integer,Node<Task>> historyTasksMap = new HashMap<>();
+    private final Map<Integer, Node<Task>> historyTasksMap = new HashMap<>();
+
     @Override
-    public void add(Task task){
-      if (historyTasksMap.containsKey(task.getId())) {
-          remove(task.getId());
-      }
-      historyLinkedList.linkLast(task);
-      historyTasksMap.put(task.getId(), historyLinkedList.tail);
+    public void add(Task task) {
+        if (historyTasksMap.containsKey(task.getId())) {
+            remove(task.getId());
+        }
+        historyLinkedList.linkLast(task);
+        historyTasksMap.put(task.getId(), historyLinkedList.tail);
     }
 
     @Override
     public List<Task> getHistory() {
-        List<Task> history =  historyLinkedList.getTasks();
+        List<Task> history = historyLinkedList.getTasks();
         Collections.reverse(history);
         return history;
     }
@@ -31,10 +32,10 @@ public class InMemoryHistoryManager implements HistoryManager{
             historyLinkedList.removeNode(nodeForDelete);
         }
     }
+
     public int historySize() {
         return historyLinkedList.getSize();
     }
-
 
 
     public static class CustomLinkedList<T> {
@@ -42,9 +43,10 @@ public class InMemoryHistoryManager implements HistoryManager{
         private Node<T> tail;
         private int size = 0;
 
+
         void linkLast(T task) {
             final Node<T> oldTail = tail;
-            final Node<T> newNode = new Node<>(oldTail,task,null);
+            final Node<T> newNode = new Node<>(oldTail, task, null);
             tail = newNode;
             if (oldTail == null) {
                 head = newNode;
@@ -53,6 +55,7 @@ public class InMemoryHistoryManager implements HistoryManager{
             }
             size++;
         }
+
 
         List<T> getTasks() {
             ArrayList<T> tasksList = new ArrayList<>();
@@ -79,6 +82,7 @@ public class InMemoryHistoryManager implements HistoryManager{
             }
             size--;
         }
+
         void removeTail() {
             Node<T> prevTail = tail.prev;
             prevTail.next = null;
@@ -106,6 +110,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         public int getSize() {
             return size;
         }
+
     }
 }
 
