@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +35,7 @@ public class FileBackedTaskManagerTest {
 
 
     public Task createTaskForTests() {
-        Task task = new Task("Task name", "Task description");
+        Task task = new Task("Task name", "Task description", Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
         fileBackedTaskManager.createTask(task);
         return task;
     }
@@ -45,7 +47,7 @@ public class FileBackedTaskManagerTest {
     }
 
     public Subtask createSubtaskForTests(Integer epicId) {
-        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId);
+        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId,LocalDateTime.of(2024,2,2,0,0),Duration.ofMinutes(60));
         fileBackedTaskManager.createSubtask(subtask);
         return subtask;
     }

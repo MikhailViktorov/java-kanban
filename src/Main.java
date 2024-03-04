@@ -7,11 +7,12 @@ import models.Task;
 
 
 /**
- * Created by Mikhail Viktorov on 24.12.2023 (update 23.02.2024)
+ * Created by Mikhail Viktorov on 24.12.2023 (update 04.03.2024)
  * the-rayn@yandex.ru
  */
 public class Main {
     public static void main(String[] args) {
+        /*
         InMemoryTaskManager taskTracker = Managers.getDefault();
 
         // 1. Создайте две задачи, эпик с тремя подзадачами и эпик без подзадач.
@@ -69,6 +70,8 @@ public class Main {
         for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
+
+         */
 
 
     }

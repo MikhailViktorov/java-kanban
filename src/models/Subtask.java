@@ -1,10 +1,13 @@
 package models;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private Integer epicId;
 
-    public Subtask(String name, String description, Integer epicId) {
-        super(name, description);
+    public Subtask(String name, String description, Integer epicId, LocalDateTime startTime, Duration duration) {
+        super(name, description, duration, startTime);
         this.epicId = epicId;
         this.taskType = TaskTypes.SUBTASK;
     }
@@ -18,12 +21,41 @@ public class Subtask extends Task {
     }
 
     @Override
+    public Duration getDuration() {
+        return super.getDuration();
+    }
+
+    @Override
+    public void setDuration(Duration duration) {
+        super.setDuration(duration);
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return super.getStartTime();
+    }
+
+    @Override
+    public void setStartTime(LocalDateTime startTime) {
+        super.setStartTime(startTime);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return super.getEndTime();
+    }
+
+    @Override
     public String toString() {
-        return "Tasks.Subtask{" +
-                "name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", Id=" + getId() +
-                ", Tasks.TaskStatus=" + getTaskStatus() +
-                ", epicId=" + epicId;
+        return "Subtask{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", epicId=" + getEpicId() +
+                ", taskStatus=" + taskStatus +
+                ", taskType=" + taskType +
+                ", duration=" + getDuration() +
+                ", startTime=" + getStartTime() +
+                '}';
     }
 }

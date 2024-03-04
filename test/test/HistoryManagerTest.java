@@ -5,6 +5,8 @@ import models.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HistoryManagerTest {
     HistoryManager historyManager;
 
-    private final Task task1 = new Task("Task1 name", "Task1 description");
-    private final Task task2 = new Task("Task2 name", "Task2 description");
-    private final Task task3 = new Task("Task3 name", "Task3 description");
+    private final Task task1 = new Task("Task1 name", "Task1 description", Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
+    private final Task task2 = new Task("Task2 name", "Task2 description",Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
+    private final Task task3 = new Task("Task3 name", "Task3 description",Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
 
     @BeforeEach
     public void createHistoryManager() {

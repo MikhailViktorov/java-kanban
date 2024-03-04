@@ -9,6 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
@@ -22,7 +25,7 @@ class InMemoryTaskManagerTest {
     }
 
     public Task createTaskForTests() {
-        Task task = new Task("Task name", "Task description");
+        Task task = new Task("Task name", "Task description", Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
         taskManager.createTask(task);
         return task;
     }
@@ -34,7 +37,7 @@ class InMemoryTaskManagerTest {
     }
 
     public Subtask createSubtaskForTests(Integer epicId) {
-        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId);
+        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId,LocalDateTime.of(2024,2,2,0,0),Duration.ofMinutes(60));
         taskManager.createSubtask(subtask);
         return subtask;
     }
@@ -135,7 +138,7 @@ class InMemoryTaskManagerTest {
     @Test
     void shouldUpdateTask() {
         Task task = createTaskForTests();
-        Task newTask = new Task("Task2", "description2");
+        Task newTask = new Task("Task2", "description2",Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
         newTask.setId(task.getId());
         taskManager.updateTask(newTask);
         assertEquals(1, taskManager.getAllTasks().size(), "invalid add to TaskList");
@@ -147,7 +150,7 @@ class InMemoryTaskManagerTest {
     void shouldUpdateSubtask() {
         Epic epic = createEpicForTests();
         Subtask subtask = createSubtaskForTests(epic.getId());
-        Subtask newSubtask = new Subtask("Subtask2", "desription2", epic.getId());
+        Subtask newSubtask = new Subtask("Subtask2", "desription2", epic.getId(),LocalDateTime.of(2024,2,2,0,0),Duration.ofMinutes(60));
 
         newSubtask.setId(subtask.getId());
         newSubtask.setTaskStatus(TaskStatus.IN_PROGRESS);
