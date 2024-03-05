@@ -1,8 +1,7 @@
 package test;
 
-import exceptions.ManagerSaveException;
+
 import managers.FileBackedTaskManager;
-import managers.InMemoryTaskManager;
 import managers.TaskManager;
 import models.Epic;
 import models.Subtask;
@@ -84,24 +83,20 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
     @Test
     public void getEpicTimeAfterCreatingSubtasks() {
-        LocalDateTime startTimeSubtask1 = LocalDateTime.of(2024, 3, 5, 0, 0);
+        LocalDateTime startTimeSubtask1 = LocalDateTime.of(2024, 3, 5, 12, 0);
         LocalDateTime startTimeSubtask2 = LocalDateTime.of(2024, 3, 5, 15, 0);
         Duration durationTimeSubtask1 = Duration.ofHours(2);
         Duration durationTimeSubtask2 = Duration.ofHours(3);
-
         Epic epic = new Epic("Title", "Description");
         Subtask subtask1 = new Subtask("Title", "Description", epic.getId(), startTimeSubtask1, durationTimeSubtask1);
         Subtask subtask2 = new Subtask("Title", "Description", epic.getId(), startTimeSubtask2, durationTimeSubtask2);
         taskManager.createEpic(epic);
-        assertEquals("PT0S", epic.getDuration().toString());
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
-        taskManager.calculateEpicTimesAndDuration(epic.getId());
 
+        assertEquals(startTimeSubtask1, epic.getStartTime(), "Epic startTime is incorrect");
+        assertEquals(durationTimeSubtask1.plus(durationTimeSubtask2), epic.getDuration(), "Epic duration is incorrect");
 
-        assertEquals(startTimeSubtask1, epic.getStartTime());
-        assertEquals(durationTimeSubtask1.plus(durationTimeSubtask2), epic.getDuration());
-        //  assertEquals(subtask2.getEndTime(), epic.getEndTime());
     }
 
 

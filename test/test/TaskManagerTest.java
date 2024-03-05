@@ -206,4 +206,11 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     }
 
+    @Test
+    public void shouldGetEndTime() {
+        Task task = new Task("Title", "Description", Duration.ofDays(10), LocalDateTime.of(2024, 3, 5, 0, 0));
+        taskManager.createTask(task);
+        assertEquals(LocalDateTime.of(2024, 3, 15, 0, 0), task.getEndTime());
+    }
+
 }
