@@ -1,6 +1,8 @@
 package test;
 
+import exceptions.ManagerSaveException;
 import managers.FileBackedTaskManager;
+import managers.InMemoryTaskManager;
 import managers.TaskManager;
 import models.Epic;
 import models.Subtask;
@@ -15,55 +17,38 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTaskManagerTest {
-    TaskManager fileBackedTaskManager;
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+
     File tmpFile;
 
-    {
-        try {
-            tmpFile = File.createTempFile("data", ".csv");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     @BeforeEach
-    public void createFileBackTaskManager() {
-        fileBackedTaskManager = new FileBackedTaskManager(tmpFile);
+    public void setUp() {
+        {
+            try {
+                tmpFile = File.createTempFile("data", ".csv");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        taskManager = new FileBackedTaskManager(tmpFile);
     }
 
-
-    public Task createTaskForTests() {
-        Task task = new Task("Task name", "Task description", Duration.ofMinutes(60), LocalDateTime.of(2024, 2, 2, 0, 0));
-        fileBackedTaskManager.createTask(task);
-        return task;
-    }
-
-    public Epic createEpicForTests() {
-        Epic epic = new Epic("Epic name", "Epic description");
-        fileBackedTaskManager.createEpic(epic);
-        return epic;
-    }
-
-    public Subtask createSubtaskForTests(Integer epicId) {
-        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId, LocalDateTime.of(2024, 3, 2, 0, 0), Duration.ofMinutes(60));
-        fileBackedTaskManager.createSubtask(subtask);
-        return subtask;
-    }
 
     @Test
     public void shouldReturnHistoryAndDataAfterCreating() {
-        Task task = createTaskForTests();
-        Epic epic = createEpicForTests();
-        Subtask subtask1 = createSubtaskForTests(epic.getId());
-        subtask1.setStartTime(LocalDateTime.of(2023, 3, 3, 0, 0));
-        Subtask subtask2 = createSubtaskForTests(epic.getId());
+        Task task = new Task("task", "taskDescription", Duration.ofMinutes(5), LocalDateTime.of(2024, 3, 5, 0, 0));
+        Epic epic = new Epic("epic", "epicDescription");
+        taskManager.createTask(task);
+        taskManager.createEpic(epic);
+        Subtask subtask = new Subtask("subtask", "subtaskDescription", epic.getId(), LocalDateTime.of(2024, 3, 5, 20, 0), Duration.ofMinutes(10));
+        Subtask subtask2 = new Subtask("subtask2", "subtaskDescription2", epic.getId(), LocalDateTime.of(2024, 3, 6, 20, 0), Duration.ofMinutes(10));
+        taskManager.createSubtask(subtask);
+        taskManager.createSubtask(subtask2);
 
-        fileBackedTaskManager.getTaskById(task.getId());
-        fileBackedTaskManager.getEpicById(epic.getId());
-        fileBackedTaskManager.getSubtaskById(subtask1.getId());
-        fileBackedTaskManager.getSubtaskById(subtask2.getId());
+        taskManager.getTaskById(task.getId());
+        taskManager.getEpicById(epic.getId());
+        taskManager.getSubtaskById(subtask.getId());
+        taskManager.getSubtaskById(subtask2.getId());
 
         TaskManager newFBTM;
         try {
@@ -79,10 +64,11 @@ public class FileBackedTaskManagerTest {
 
     }
 
+
     @Test
     public void shouldReturnEmptyHistoryAndDataAfterDeleting() {
-        fileBackedTaskManager.deleteAllTasks();
-        fileBackedTaskManager.deleteAllEpics();
+        taskManager.deleteAllTasks();
+        taskManager.deleteAllEpics();
         TaskManager newFBTM;
         try {
             newFBTM = FileBackedTaskManager.loadFromFile(tmpFile);
@@ -94,6 +80,28 @@ public class FileBackedTaskManagerTest {
         assertEquals(0, newFBTM.getAllSubtasks().size());
         assertEquals(0, newFBTM.getAllEpics().size());
         assertEquals(0, newFBTM.getHistory().size());
+    }
+
+    @Test
+    public void getEpicTimeAfterCreatingSubtasks() {
+        LocalDateTime startTimeSubtask1 = LocalDateTime.of(2024, 3, 5, 0, 0);
+        LocalDateTime startTimeSubtask2 = LocalDateTime.of(2024, 3, 5, 15, 0);
+        Duration durationTimeSubtask1 = Duration.ofHours(2);
+        Duration durationTimeSubtask2 = Duration.ofHours(3);
+
+        Epic epic = new Epic("Title", "Description");
+        Subtask subtask1 = new Subtask("Title", "Description", epic.getId(), startTimeSubtask1, durationTimeSubtask1);
+        Subtask subtask2 = new Subtask("Title", "Description", epic.getId(), startTimeSubtask2, durationTimeSubtask2);
+        taskManager.createEpic(epic);
+        assertEquals("PT0S", epic.getDuration().toString());
+        taskManager.createSubtask(subtask1);
+        taskManager.createSubtask(subtask2);
+        taskManager.calculateEpicTimesAndDuration(epic.getId());
+
+
+        assertEquals(startTimeSubtask1, epic.getStartTime());
+        assertEquals(durationTimeSubtask1.plus(durationTimeSubtask2), epic.getDuration());
+        //  assertEquals(subtask2.getEndTime(), epic.getEndTime());
     }
 
 

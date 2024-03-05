@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.IntersectionException;
 import models.*;
 
 import java.time.Duration;
@@ -45,8 +46,8 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.put(subtask.getId(), subtask);
 
         prioritizedTasks.add(subtask);
-        calculateEpicTimesAndDuration(subtask.getEpicId());
         updateEpicStatus(epic);
+        calculateEpicTimesAndDuration(subtask.getEpicId());
 
     }
 
@@ -165,16 +166,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        checkIntersectionOfTasks(task);
-        Task saveTask = tasks.get(task.getId());
-        if (saveTask == null) {
-            return;
+        try {
+            checkIntersectionOfTasks(task);
+            Task saveTask = tasks.get(task.getId());
+            if (saveTask == null) {
+                return;
+            }
+            saveTask.setName(task.getName());
+            saveTask.setDescription(task.getDescription());
+            saveTask.setTaskStatus(task.getTaskStatus());
+            saveTask.setStartTime(task.getStartTime());
+            saveTask.setId(task.getId());
+            saveTask.setDuration(task.getDuration());
+            prioritizedTasks.remove(task);
+            prioritizedTasks.add(saveTask);
+        } catch (IntersectionException e) {
+            System.out.println("Time overlap when updating a task with ID:" + task.getId());
         }
-        saveTask.setName(task.getName());
-        saveTask.setDescription(task.getDescription());
-        saveTask.setTaskStatus(task.getTaskStatus());
-        prioritizedTasks.remove(task);
-        prioritizedTasks.add(saveTask);
     }
 
 
@@ -188,15 +196,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtasks(Subtask subtask) {
-        checkIntersectionOfTasks(subtask);
-        Subtask saveSubtask = subtasks.get(subtask.getId());
-        if (subtasks.get(subtask.getId()) != null) {
-            subtasks.put(subtask.getId(), subtask);
-            Epic epic = epics.get(subtask.getEpicId());
-            calculateEpicTimesAndDuration(subtask.getEpicId());
-            updateEpicStatus(epic);
-            prioritizedTasks.remove(subtask);
-            prioritizedTasks.add(saveSubtask);
+        try {
+            checkIntersectionOfTasks(subtask);
+            Subtask saveSubtask = subtasks.get(subtask.getId());
+            if (subtasks.get(subtask.getId()) != null) {
+                subtasks.put(subtask.getId(), subtask);
+                Epic epic = epics.get(subtask.getEpicId());
+                calculateEpicTimesAndDuration(subtask.getEpicId());
+                updateEpicStatus(epic);
+                prioritizedTasks.remove(subtask);
+                prioritizedTasks.add(saveSubtask);
+            }
+        } catch (IntersectionException e) {
+            System.out.println("Time overlap when updating a subtask with ID:" + subtask.getId());
         }
     }
 
@@ -294,6 +306,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+
     @Override
     public TreeSet<Task> getPrioritizedTasks() {
         return prioritizedTasks;
@@ -324,7 +337,7 @@ public class InMemoryTaskManager implements TaskManager {
                 .reduce(Integer::sum)
                 .orElse(0);
         if (result > 0) {
-            throw new IllegalArgumentException("Задача пересекается");
+            throw new IntersectionException("tasks overlap");
         }
     }
 
