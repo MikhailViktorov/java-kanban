@@ -35,7 +35,7 @@ public class FileBackedTaskManagerTest {
 
 
     public Task createTaskForTests() {
-        Task task = new Task("Task name", "Task description", Duration.ofMinutes(60), LocalDateTime.of(2024,2,2,0,0));
+        Task task = new Task("Task name", "Task description", Duration.ofMinutes(60), LocalDateTime.of(2024, 2, 2, 0, 0));
         fileBackedTaskManager.createTask(task);
         return task;
     }
@@ -47,7 +47,7 @@ public class FileBackedTaskManagerTest {
     }
 
     public Subtask createSubtaskForTests(Integer epicId) {
-        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId,LocalDateTime.of(2024,2,2,0,0),Duration.ofMinutes(60));
+        Subtask subtask = new Subtask("Subtask name", "Subtask description", epicId, LocalDateTime.of(2024, 3, 2, 0, 0), Duration.ofMinutes(60));
         fileBackedTaskManager.createSubtask(subtask);
         return subtask;
     }
@@ -57,6 +57,7 @@ public class FileBackedTaskManagerTest {
         Task task = createTaskForTests();
         Epic epic = createEpicForTests();
         Subtask subtask1 = createSubtaskForTests(epic.getId());
+        subtask1.setStartTime(LocalDateTime.of(2023, 3, 3, 0, 0));
         Subtask subtask2 = createSubtaskForTests(epic.getId());
 
         fileBackedTaskManager.getTaskById(task.getId());

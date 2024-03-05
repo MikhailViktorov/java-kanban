@@ -203,6 +203,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
     public static void main(String[] args) throws IOException {
+
         FileBackedTaskManager fileManager = new FileBackedTaskManager(new File("saveTasks2.csv"));
         fileManager.createTask(new Task("task1", "Купить автомобиль", Duration.ofMinutes(60), LocalDateTime.of(2024, 2, 2, 0, 0)));
         fileManager.createEpic(new Epic("new Epic1", "Новый Эпик"));
@@ -222,16 +223,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         System.out.println("\n\n" + "new" + "\n\n");
         FileBackedTaskManager fileBackedTasksManager = loadFromFile(new File("saveTasks2.csv"));
+
         System.out.println(fileBackedTasksManager.getAllTasks());
         System.out.println(fileBackedTasksManager.getEpics());
         System.out.println(fileBackedTasksManager.getAllSubtasks());
         System.out.println(fileBackedTasksManager.getHistory());
 
+
         System.out.println("\nСписок задач в порядке приоритета:");
         for (Task task : fileBackedTasksManager.getPrioritizedTasks()) {
             System.out.println(task);
         }
-        //    System.out.println(fileManager.getPrioritizedTasks());
+
+
     }
 
 

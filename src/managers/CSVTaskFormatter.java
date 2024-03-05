@@ -40,7 +40,7 @@ public class CSVTaskFormatter {
         String description = dataValues[4];
         LocalDateTime startTime = LocalDateTime.parse(dataValues[5]);
         Duration duration = Duration.ofMinutes(Long.parseLong(dataValues[6]));
-
+        LocalDateTime endTime = LocalDateTime.parse(dataValues[7]);
 
         switch (taskType) {
             case TASK:
@@ -51,6 +51,9 @@ public class CSVTaskFormatter {
             case EPIC:
                 Epic epic = new Epic(name, description);
                 epic.setId(id);
+                epic.setStartTime(startTime);
+                epic.setDuration(duration);
+                epic.setEndTime(endTime);
                 return epic;
             case SUBTASK:
                 Integer epicId = Integer.parseInt(dataValues[8]);
