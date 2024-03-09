@@ -301,5 +301,28 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(epic.getId(), subtask2.getEpicId());
     }
 
+    @Test
+    public void TasksWithIntersectionShouldNotBeCreated() {
+        Task task1 = new Task("task1", "taskDescription1", Duration.ofMinutes(5), LocalDateTime.of(2024, 3, 5, 0, 0));
+        Task task2 = new Task("task1", "taskDescription1", Duration.ofMinutes(5), LocalDateTime.of(2024, 3, 5, 0, 0));
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
+
+        assertEquals(1, taskManager.getAllTasks().size(), "tasks with intersection have be created");
+
+    }
+
+    @Test
+    public void SubtasksWithIntersectionShouldNotBeCreated() {
+        Epic epic = new Epic("epic1", "epicDescription");
+        Subtask subtask1 = new Subtask("subtask", "subtaskDescription", epic.getId(), LocalDateTime.of(2024, 3, 5, 20, 0), Duration.ofMinutes(10));
+        Subtask subtask2 = new Subtask("subtask", "subtaskDescription", epic.getId(), LocalDateTime.of(2024, 3, 5, 20, 0), Duration.ofMinutes(10));
+        taskManager.createEpic(epic);
+        taskManager.createSubtask(subtask1);
+        taskManager.createSubtask(subtask2);
+
+        assertEquals(1, taskManager.getAllSubtasks().size(), "subtasks with intersection have be created");
+    }
+
 
 }
