@@ -32,7 +32,6 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         taskManager = new FileBackedTaskManager(tmpFile);
     }
 
-
     @Test
     public void shouldReturnHistoryAndDataAfterCreating() {
         Task task = new Task("task", "taskDescription", Duration.ofMinutes(5), LocalDateTime.of(2024, 3, 5, 0, 0));
