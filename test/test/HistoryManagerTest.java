@@ -78,5 +78,13 @@ public class HistoryManagerTest {
         assertEquals(2, history.size(), "incorrect history size after delete tail");
     }
 
+    @Test
+    public void shouldReturnHistorySize() {
+        historyManager.add(task1);
+        historyManager.add(task2);
+
+        assertEquals(2, historyManager.historySize(), "incorrect history size");
+    }
+
 
 }

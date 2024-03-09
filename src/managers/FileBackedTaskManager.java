@@ -214,7 +214,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         fileManager.getEpicById(2);
         fileManager.getSubtaskById(3);
         System.out.println(fileManager.getAllTasks());
-        System.out.println(fileManager.getEpics());
+        System.out.println(fileManager.getAllEpics());
         System.out.println(fileManager.getAllSubtasks());
         System.out.println(fileManager.getHistory());
         System.out.println("\nСписок задач в порядке приоритета до сохранения:");
@@ -225,7 +225,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         FileBackedTaskManager fileBackedTasksManager = loadFromFile(new File("saveTasks2.csv"));
 
         System.out.println(fileBackedTasksManager.getAllTasks());
-        System.out.println(fileBackedTasksManager.getEpics());
+        System.out.println(fileBackedTasksManager.getAllEpics());
         System.out.println(fileBackedTasksManager.getAllSubtasks());
         System.out.println(fileBackedTasksManager.getHistory());
 
