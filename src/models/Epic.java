@@ -1,14 +1,16 @@
 package models;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    // Каждый эпик знает, какие подзадачи в него входят.
-    private List<Integer> subtaskList;
+    private LocalDateTime endTime;
+    private final List<Integer> subtaskList;
 
     public Epic(String name, String description) {
-        super(name, description);
+        super(name, description, Duration.ofMinutes(0), LocalDateTime.now());
         this.subtaskList = new ArrayList<>();
         this.taskType = TaskTypes.EPIC;
     }
@@ -21,18 +23,29 @@ public class Epic extends Task {
         this.subtaskList.add(subtaskId);
     }
 
-    public void deleteSubtask(int subtaskId) {
-        this.subtaskList.remove(subtaskId);
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void clearSubtaskList() {
+        subtaskList.clear();
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override
     public String toString() {
-        return "Tasks.Epic{" +
-                "name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", epicId= " + getId() +
-                ", subtaskList=" + subtaskList +
-                ", epicStatus=" + getTaskStatus() +
+        return "Epic{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", taskStatus=" + taskStatus +
+                ", taskType=" + taskType +
+                ", duration=" + getDuration() +
+                ", startTime=" + getStartTime() +
                 '}';
     }
 }

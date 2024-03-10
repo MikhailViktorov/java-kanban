@@ -2,6 +2,8 @@ package managers;
 
 import models.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,8 +16,12 @@ public class CSVTaskFormatter {
         String name = task.getName();
         TaskStatus status = task.getTaskStatus();
         String description = task.getDescription();
+        Long duration = task.getDuration().toMinutes();
+        LocalDateTime startTime = task.getStartTime();
+        LocalDateTime endTime = task.getEndTime();
 
-        String taskString = String.format("%s,%s,%s,%s,%s", id, type, name, status, description);
+
+        String taskString = String.format("%s,%s,%s,%s,%s,%s,%s,%s", id, type, name, status, description, startTime, duration, endTime);
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
             taskString += ",";
@@ -32,20 +38,26 @@ public class CSVTaskFormatter {
         String name = dataValues[2];
         TaskStatus status = TaskStatus.valueOf(dataValues[3]);
         String description = dataValues[4];
+        LocalDateTime startTime = LocalDateTime.parse(dataValues[5]);
+        Duration duration = Duration.ofMinutes(Long.parseLong(dataValues[6]));
+        LocalDateTime endTime = LocalDateTime.parse(dataValues[7]);
 
         switch (taskType) {
             case TASK:
-                Task task = new Task(name, description);
+                Task task = new Task(name, description, duration, startTime);
                 task.setId(id);
                 task.setTaskStatus(status);
                 return task;
             case EPIC:
                 Epic epic = new Epic(name, description);
                 epic.setId(id);
+                epic.setStartTime(startTime);
+                epic.setDuration(duration);
+                epic.setEndTime(endTime);
                 return epic;
             case SUBTASK:
-                Integer epicId = Integer.parseInt(dataValues[5]);
-                Subtask subtask = new Subtask(name, description, epicId);
+                Integer epicId = Integer.parseInt(dataValues[8]);
+                Subtask subtask = new Subtask(name, description, epicId, startTime, duration);
                 subtask.setId(id);
                 subtask.setTaskStatus(status);
                 return subtask;
