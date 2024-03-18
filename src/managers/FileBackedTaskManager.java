@@ -13,14 +13,15 @@ import java.util.List;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private final File fileForSaveData;
+    private File fileForSaveData;
+
 
     public FileBackedTaskManager(File file) {
         this.fileForSaveData = file;
     }
 
 
-    private void save() {
+    protected void save() {
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileForSaveData))) {
             bufferedWriter.write("id,type,name,status,description,startTime,duration,endTime,epic\n");

@@ -55,10 +55,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
             throw new RuntimeException(e);
         }
 
-        assertEquals(1, newFBTM.getAllTasks().size());
-        assertEquals(2, newFBTM.getAllSubtasks().size());
-        assertEquals(1, newFBTM.getAllEpics().size());
-        assertEquals(4, newFBTM.getHistory().size());
+        assertEquals(1, newFBTM.getAllTasks().size(), "incorrect tasks size after load from file");
+        assertEquals(2, newFBTM.getAllSubtasks().size(), "incorrect subtasks size after load from file");
+        assertEquals(1, newFBTM.getAllEpics().size(), "incorrect epics size after load from file");
+        assertEquals(4, newFBTM.getHistory().size(), "incorrect history size after load from file");
 
     }
 
@@ -74,10 +74,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
             throw new RuntimeException(e);
         }
 
-        assertEquals(0, newFBTM.getAllTasks().size());
-        assertEquals(0, newFBTM.getAllSubtasks().size());
-        assertEquals(0, newFBTM.getAllEpics().size());
-        assertEquals(0, newFBTM.getHistory().size());
+        assertEquals(0, newFBTM.getAllTasks().size(), "incorrect tasks size after load from empty file");
+        assertEquals(0, newFBTM.getAllSubtasks().size(), "incorrect subtasks size after load from empty file");
+        assertEquals(0, newFBTM.getAllEpics().size(), "incorrect epics size after load from empty file");
+        assertEquals(0, newFBTM.getHistory().size(), "incorrect history size after load from empty file");
     }
 
     @Test
