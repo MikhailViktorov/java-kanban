@@ -1,7 +1,6 @@
-package test;
+package managers;
 
 
-import managers.TaskManager;
 import models.Epic;
 import models.Subtask;
 import models.Task;

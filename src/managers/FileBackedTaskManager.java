@@ -7,8 +7,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -200,43 +198,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public List<Task> getHistory() {
         return super.getHistory();
-    }
-
-
-    public static void main(String[] args) throws IOException {
-
-        FileBackedTaskManager fileManager = new FileBackedTaskManager(new File("saveTasks2.csv"));
-        fileManager.createTask(new Task("task1", "Купить автомобиль", Duration.ofMinutes(60), LocalDateTime.of(2024, 2, 2, 0, 0)));
-        fileManager.createEpic(new Epic("new Epic1", "Новый Эпик"));
-        fileManager.createSubtask(new Subtask("New Subtask", "Подзадача", 2, LocalDateTime.of(2026, 2, 2, 0, 0), Duration.ofMinutes(60)));
-        fileManager.createSubtask(new Subtask("New Subtask2", "Подзадача2", 2, LocalDateTime.of(2025, 2, 2, 0, 0), Duration.ofMinutes(50)));
-        fileManager.createSubtask(new Subtask("New Subtask2", "Подзадача2", 2, LocalDateTime.of(2025, 3, 2, 0, 0), Duration.ofMinutes(50)));
-        fileManager.getTaskById(1);
-        fileManager.getEpicById(2);
-        fileManager.getSubtaskById(3);
-        System.out.println(fileManager.getAllTasks());
-        System.out.println(fileManager.getAllEpics());
-        System.out.println(fileManager.getAllSubtasks());
-        System.out.println(fileManager.getHistory());
-        System.out.println("\nСписок задач в порядке приоритета до сохранения:");
-        for (Task task : fileManager.getPrioritizedTasks()) {
-            System.out.println(task);
-        }
-        System.out.println("\n\n" + "new" + "\n\n");
-        FileBackedTaskManager fileBackedTasksManager = loadFromFile(new File("saveTasks2.csv"));
-
-        System.out.println(fileBackedTasksManager.getAllTasks());
-        System.out.println(fileBackedTasksManager.getAllEpics());
-        System.out.println(fileBackedTasksManager.getAllSubtasks());
-        System.out.println(fileBackedTasksManager.getHistory());
-
-
-        System.out.println("\nСписок задач в порядке приоритета:");
-        for (Task task : fileBackedTasksManager.getPrioritizedTasks()) {
-            System.out.println(task);
-        }
-
-
     }
 
 
