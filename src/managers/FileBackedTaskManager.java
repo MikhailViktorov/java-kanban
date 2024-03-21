@@ -19,7 +19,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
 
-    protected void save() {
+    private void save() {
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileForSaveData))) {
             bufferedWriter.write("id,type,name,status,description,startTime,duration,endTime,epic\n");

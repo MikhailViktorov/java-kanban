@@ -1,6 +1,7 @@
 package managers;
 
 
+import exceptions.ManagerSaveException;
 import models.Epic;
 import models.Subtask;
 import models.Task;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -32,7 +34,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
     @Test
     public void shouldReturnHistoryAndDataAfterCreating() {
-        Task task = new Task("task", "taskDescription", Duration.ofMinutes(5), LocalDateTime.of(2024, 3, 5, 0, 0));
+        Task task = new Task("task", "taskDescription", Duration.ofMinutes(5),
+                LocalDateTime.of(2024, 3, 5, 0, 0));
         Epic epic = new Epic("epic", "epicDescription");
         taskManager.createTask(task);
         taskManager.createEpic(epic);
@@ -94,6 +97,25 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         assertEquals(startTimeSubtask1, epic.getStartTime(), "Epic startTime is incorrect");
         assertEquals(durationTimeSubtask1.plus(durationTimeSubtask2), epic.getDuration(), "Epic duration is incorrect");
 
+    }
+
+    @Test
+    public void getExceptionIfAnInvalidPathWasReceivedWhenSaving() {
+        tmpFile = new File("invalidPath", "file.csv");
+        taskManager = new FileBackedTaskManager(tmpFile);
+        assertThrows(ManagerSaveException.class,
+                () -> taskManager.createTask(new Task("task", "taskDescription", Duration.ofMinutes(5),
+                        LocalDateTime.of(2024, 3, 5, 0, 0))),
+                "saving to a non-existent file should throw an exception"
+        );
+    }
+
+    @Test
+    public void getExceptionIfAnInvalidPathWasReceivedWhenLoad() {
+        tmpFile = new File("invalidPath", "file.csv");
+        assertThrows(NoSuchFileException.class,
+                () -> FileBackedTaskManager.loadFromFile(tmpFile),"load from a non-existent file should throw an exception"
+        );
     }
 
 
