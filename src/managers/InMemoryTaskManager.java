@@ -5,7 +5,6 @@ import models.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -301,7 +300,7 @@ public class InMemoryTaskManager implements TaskManager {
                         return;
                     }
                     duration = duration + subtask.getDuration().toMinutes();
-                    epic.setDuration(Duration.of(duration, ChronoUnit.MINUTES));
+                    epic.setDuration(Duration.ofMinutes(duration));
                 }
             }
         }

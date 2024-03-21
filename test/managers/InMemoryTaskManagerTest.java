@@ -1,6 +1,5 @@
-package test;
+package managers;
 
-import managers.*;
 import models.Epic;
 import models.Subtask;
 import org.junit.jupiter.api.BeforeEach;

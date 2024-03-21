@@ -1,7 +1,6 @@
-package test;
+package managers;
 
 
-import managers.TaskManager;
 import models.Epic;
 import models.Subtask;
 import models.Task;
@@ -12,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public abstract class TaskManagerTest<T extends TaskManager> {
@@ -149,10 +147,12 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         task.setName("newName");
         task.setDuration(Duration.ofMinutes(50));
+        task.setStartTime(LocalDateTime.of(2024, 3, 11, 0, 0));
         taskManager.updateTask(task);
 
         assertEquals("newName", taskManager.getTaskById(task.getId()).getName(), "Name task is not updated");
         assertEquals("PT50M", taskManager.getTaskById(task.getId()).getDuration().toString(), "Duration task is not updated");
+        assertEquals("2024-03-11T00:00", task.getStartTime().toString());
 
     }
 
@@ -323,6 +323,4 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertEquals(1, taskManager.getAllSubtasks().size(), "subtasks with intersection have be created");
     }
-
-
 }

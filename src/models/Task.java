@@ -24,7 +24,6 @@ public class Task {
         this.startTime = startTime;
     }
 
-
     public String getName() {
         return name;
     }
