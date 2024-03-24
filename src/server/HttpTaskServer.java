@@ -18,14 +18,16 @@ public class HttpTaskServer {
 
     private static final int PORT = 8080;
     private final HttpServer server;
-    private static Gson gson;
+    private static final Gson gson;
 
-
-    public HttpTaskServer(TaskManager taskManager) throws IOException {
+    static {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter());
         gson = gsonBuilder.create();
+    }
+
+    public HttpTaskServer(TaskManager taskManager) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(PORT), 0);
         server.createContext("/tasks", new TasksHandler(taskManager));
         server.createContext("/subtasks", new SubtasksHandler(taskManager));
